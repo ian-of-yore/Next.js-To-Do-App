@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import '../styles/globals.css'
 import { useEffect } from "react";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import AuthProvider from "../context";
 
 
 export default function App({ Component, pageProps }) {
@@ -11,8 +11,9 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   return <>
+    <AuthProvider>
       <Header></Header>
       <Component {...pageProps} />
-      <Footer></Footer>
+    </AuthProvider>
   </>
 }
