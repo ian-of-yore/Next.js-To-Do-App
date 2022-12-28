@@ -1,10 +1,11 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import { AuthContext } from "../../context";
 
 const index = () => {
-
+    const router = useRouter();
     const { userLogin, googleLogin } = useContext(AuthContext);
 
     const handleSubmit = (event) => {
@@ -15,7 +16,10 @@ const index = () => {
         // console.log(email, password)
         userLogin(email, password)
             .then(result => {
-                console.log(result.user)
+                console.log(result.user);
+                if (result.user) {
+                    router.replace(localStorage.getItem("path") || "/");
+                }
             })
             .catch(err => console.log(err))
     };
@@ -23,7 +27,10 @@ const index = () => {
     const handleGoogleSingIn = () => {
         googleLogin()
             .then(result => {
-                console.log(result.user)
+                console.log(result.user);
+                if (result.user) {
+                    router.replace(localStorage.getItem("path") || "/");
+                }
             })
             .catch(err => console.log(err))
     }
