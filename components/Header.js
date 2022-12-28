@@ -3,6 +3,15 @@ import { useContext } from "react";
 import { AuthContext } from "../context";
 
 const Header = () => {
+
+    const { user, userLogOut } = useContext(AuthContext);
+
+    const handleLogOut = () => {
+        userLogOut()
+            .then(() => { })
+            .catch(err => console.log(err))
+    }
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -23,7 +32,12 @@ const Header = () => {
                                 <Link className="nav-link active" aria-current="page" href="/completedTasks">Completed</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" href="/login">Login</Link>
+                                {
+                                    user?.uid ?
+                                        <Link href='#' onClick={handleLogOut} className="nav-link active" aria-current="page">Log Out</Link>
+                                        :
+                                        <Link className="nav-link active" aria-current="page" href="/login">Login</Link>
+                                }
                             </li>
                         </ul>
                     </div>
