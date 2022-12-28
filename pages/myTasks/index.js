@@ -1,12 +1,15 @@
+import { async } from "@firebase/util";
+import { useQuery } from "@tanstack/react-query";
 import Head from "next/head";
 import Router, { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context";
 
 
 const MyTasks = () => {
     const router = useRouter();
     const { user } = useContext(AuthContext);
+
 
     useEffect(() => {
         if (!user?.email) {
@@ -21,7 +24,25 @@ const MyTasks = () => {
         }
     }, []);
 
-    
+
+    const [data, setData] = useState(null);
+    const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true)
+        fetch(`http://localhost:5000/tasks?email=${user?.email}`)
+            .then((res) => res.json())
+            .then((data) => {
+                setData(data)
+                setLoading(false)
+            })
+    }, []);
+
+    if (isLoading) return <p>Loading...</p>
+    if (!data) return <p>No profile data</p>
+
+    console.log(data)
+
 
     return (
         <div>
@@ -29,34 +50,27 @@ const MyTasks = () => {
                 <title>My Tasks</title>
             </Head>
             <div className="w-75 mx-auto" style={{ marginTop: '100px' }}>
-                <h1 className="mb-5 text-center">Here you will see all your tasks</h1>
+                <h1 className="mb-5 text-center">These are your pending tasks</h1>
                 <table className="table table-striped table-dark">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Task</th>
+                            <th scope="col">Details</th>
+                            <th scope="col">Update</th>
+                            <th scope="col">Remove</th>
+                            <th scope="col">Completed</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colSpan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
+                        {data.map((task, index) => <tr>
+                            <th scope="row">{index + 1}</th>
+                            <td>{task.taskName}</td>
+                            <td><button className="btn btn-outline-light">See Details</button></td>
+                            <td><button className="btn btn-outline-warning">Update</button></td>
+                            <td><button className="btn btn-outline-danger">Remove</button></td>
+                            <td><button className="btn btn-outline-primary">Completed</button></td>
+                        </tr>)}
                     </tbody>
                 </table>
             </div>
