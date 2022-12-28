@@ -39,6 +39,8 @@ const MyTasks = () => {
             })
     }, []);
 
+    console.log(data)
+
     if (isLoading) return <p>Loading...</p>
     if (!data) return <p>No profile data</p>
 
@@ -92,28 +94,24 @@ const MyTasks = () => {
             </Head>
             <div className="w-75 mx-auto" style={{ marginTop: '100px' }}>
                 <h1 className="mb-5 text-center">These are your selected tasks</h1>
-                <table className="table table-striped table-dark">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Task</th>
-                            <th scope="col">Details</th>
-                            <th scope="col">Update</th>
-                            <th scope="col">Remove</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map((task, index) => <tr key={task._id}>
-                            <th scope="row">{index + 1}</th>
-                            <td>{task.taskName}</td>
-                            <td><Link href={`/myTasks/${task._id}`}><button className="btn btn-outline-light">See Details</button></Link></td>
-                            <td><button className="btn btn-outline-warning">Update</button></td>
-                            <td><button onClick={() => handleRemoveTask(task._id)} className="btn btn-outline-danger">Remove</button></td>
-                            <td><button onClick={() => handleTaskComplete(task._id)} className="btn btn-outline-primary">{task.status === 'completed' ? <span>Completed</span> : <span>Pending</span>}</button></td>
-                        </tr>)}
-                    </tbody>
-                </table>
+                <div className="row row-cols-1 row-cols-md-2 g-4">
+                    {
+                        data.map(task => <div className="col" key={task._id}>
+                            <div className="card bg-dark text-white">
+                                <img src="#" className="card-img-top" alt="..." />
+                                <div className="card-body">
+                                    <h5 className="card-title">Task: {task.taskName}</h5>
+                                    <div className="d-flex justify-content-around mt-4">
+                                        <Link href={`/myTasks/${task._id}`}><button className="btn btn-outline-light btn-sm">Details</button></Link>
+                                        <button className="btn btn-outline-light btn-sm">Update</button>
+                                        <button onClick={() => handleRemoveTask(task._id)} className="btn btn-outline-light btn-sm">Remove</button>
+                                        <button onClick={() => handleTaskComplete(task._id)} className="btn btn-outline-light btn-sm">{task.status === 'completed' ? <span>Completed</span> : <span>Pending</span>}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>)
+                    }
+                </div>
             </div>
         </div>
     );
