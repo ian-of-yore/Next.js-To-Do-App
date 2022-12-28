@@ -1,16 +1,23 @@
 import Head from "next/head";
+import { useContext } from "react";
+import { AuthContext } from "../../context";
 
 const AddTask = () => {
+
+    const { user } = useContext(AuthContext);
 
     const handleAddTask = (event) => {
         event.preventDefault();
         const form = event.target;
         const taskName = form.taskName.value;
         const taskDetails = form.tastDetails.value;
+        const userEmail = user?.email;
         const doc = {
             taskName,
-            taskDetails
+            taskDetails,
+            userEmail
         }
+        // console.log(doc)
         fetch('http://localhost:5000/tasks', {
             method: 'POST',
             headers: {
@@ -43,7 +50,7 @@ const AddTask = () => {
                         <label htmlFor="exampleInputPassword1" className="form-label">Description</label>
                         <textarea name="tastDetails" className="form-control" aria-label="With textarea" placeholder="Task Description" required />
                     </div>
-                    <button type="submit" className="btn btn-primary w-100">Add to list</button>
+                    <button type="submit" className="btn btn-primary w-100" disabled={!user?.email}>Add to list</button>
                 </form>
             </div>
         </div>
