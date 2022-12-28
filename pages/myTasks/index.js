@@ -61,7 +61,8 @@ const MyTasks = () => {
                     const updatedTask = data.find(task => task._id === id);
                     updatedTask.status = status.status;
                     const newTasks = [...remaining, updatedTask];
-                    setData(newTasks)
+                    setData(newTasks);
+                    router.push('/completedTasks')
                 }
             })
             .catch(err => console.log(err))
