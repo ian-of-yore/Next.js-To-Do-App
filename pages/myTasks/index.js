@@ -1,11 +1,12 @@
 import { async } from "@firebase/util";
 import { useQuery } from "@tanstack/react-query";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
+import Modal from "../../components/Modal";
 import { AuthContext } from "../../context";
-
 
 const MyTasks = () => {
     const router = useRouter();
@@ -84,6 +85,10 @@ const MyTasks = () => {
                     }
                 })
         }
+    };
+
+    const handleUpdateTask = (id) => {
+        console.log(id)
     }
 
 
@@ -94,16 +99,21 @@ const MyTasks = () => {
             </Head>
             <div className="w-75 mx-auto" style={{ marginTop: '100px' }}>
                 <h1 className="mb-5 text-center">These are your selected tasks</h1>
-                <div className="row row-cols-1 row-cols-md-2 g-4">
+                <div className="row row-cols-2 row-cols-md-3 g-4">
                     {
                         data.map(task => <div className="col" key={task._id}>
                             <div className="card bg-dark text-white">
-                                <img src="#" className="card-img-top" alt="..." />
+                                {
+                                    task?.taskURL ?
+                                        <img src={task.taskURL} className="card-img-top" alt="..." />
+                                        :
+                                        <Image src='/task.jfif' width={120} height={100} alt='..'></Image>
+                                }
                                 <div className="card-body">
                                     <h5 className="card-title">Task: {task.taskName}</h5>
                                     <div className="d-flex justify-content-around mt-4">
                                         <Link href={`/myTasks/${task._id}`}><button className="btn btn-outline-light btn-sm">Details</button></Link>
-                                        <button className="btn btn-outline-light btn-sm">Update</button>
+                                        <button onClick={() => handleUpdateTask(task._id)} className="btn btn-outline-light btn-sm" >Update</button>
                                         <button onClick={() => handleRemoveTask(task._id)} className="btn btn-outline-light btn-sm">Remove</button>
                                         <button onClick={() => handleTaskComplete(task._id)} className="btn btn-outline-light btn-sm">{task.status === 'completed' ? <span>Completed</span> : <span>Pending</span>}</button>
                                     </div>
