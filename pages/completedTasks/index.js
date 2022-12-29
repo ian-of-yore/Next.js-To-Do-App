@@ -1,5 +1,6 @@
 import { async } from "@firebase/util";
 import Head from "next/head";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context";
@@ -22,7 +23,6 @@ const CompletedTasks = () => {
             })
     }, [user?.email]);
 
-
     // if (isLoading) return <p>Loading...</p>
     // if (!completedTasks) return <p>No profile data</p>
 
@@ -44,36 +44,60 @@ const CompletedTasks = () => {
                     router.push('/myTasks')
                 }
             })
+    };
+
+    const handleCompletedTask = (id) => {
+        const confirm = window.confirm("Delete this review?");
+        if (confirm) {
+            fetch(`http://localhost:5000/allTasks${id}`, {
+                method: 'DELETE'
+            })
+                .then(res => res.json())
+                .then(d => {
+                    if (d.deletedCount) {
+                        const remaining = completedTasks.filter(task => task._id !== id);
+                        setCompletedTasks(remaining)
+                    }
+                })
+        }
     }
 
     return (
-        <div className="w-75 mx-auto text-center" style={{ marginTop: '100px' }}>
+        <div className="w-75 mx-auto text-center mb-5" style={{ marginTop: '100px' }}>
             <Head>
                 <title>Completed Tasks</title>
             </Head>
-            <h1>You've completed these tasks</h1>
-            <div>
-                <div className="container text-center w-100">
-                    <div className="row ms-5 mt-5">
-                        {
-                            completedTasks.map(task => <div className="card col-5 bg-dark text-white mb-3 me-3" key={task._id}>
-                                <img src="#" className="card-img-top" alt="..." />
-                                <div className="card-body">
-                                    <h5 className="card-title">{task.taskName}</h5>
-                                    {
-                                        task.comment ? <p>{task.comment}</p> : ''
-                                    }
-                                    <div className="d-flex justify-content-between">
+            <div className="w-100 mx-auto" style={{ marginTop: '100px' }}>
+                <h1 className="mb-5">You have completed these tasks</h1>
+                <div className="row row-cols-2 row-cols-md-3 g-4">
+                    {
+                        completedTasks.map(task => <div className="col" key={task._id}>
+                            <div className="card bg-dark text-white" style={{ width: '350px', height: '400px' }}>
+                                {
+                                    task?.taskURL ?
+                                        <img src={task.taskURL} className="card-img-top" alt="..." style={{ width: '348px', height: '280px' }} />
+                                        :
+                                        <Image src='/task.jfif' alt='..' width={348} height={280}></Image>
+                                }
+                                <div className="card-body p-0" style={{ height: '120px' }}>
+                                    <h5 className="card-title text-start pt-1 ps-2 mb-0" style={{ height: '30px' }}>{task.taskName}</h5>
+                                    <div style={{ height: '45px' }}>
+                                        {
+                                            task.comment ? <p>{task.comment}</p> : <p className="text-start ps-2 mt-1 mb-2">lmao</p>
+                                        }
+                                    </div>
+                                    <div className="d-flex justify-content-between px-2" style={{ height: '30px' }}>
                                         <button href="#" className="btn btn-outline-light btn-sm">Add Comment</button>
                                         <button onClick={() => handleTaskNotCompleted(task._id)} href="#" className="btn btn-outline-light btn-sm">Not Completed</button>
-                                        <button href="#" className="btn btn-outline-light btn-sm">Remove</button>
+                                        <button onClick={() => handleCompletedTask(task._id)} href="#" className="btn btn-outline-light btn-sm">Remove</button>
                                     </div>
                                 </div>
-                            </div>)
-                        }
-                    </div>
+                            </div>
+                        </div>)
+                    }
                 </div>
             </div>
+
         </div>
     );
 };

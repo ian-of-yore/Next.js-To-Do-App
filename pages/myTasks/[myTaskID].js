@@ -6,16 +6,18 @@ const MyTaskID = ({ task }) => {
     const router = useRouter();
     const id = router.query.myTaskID;
 
+    console.log(task)
     return (
         <div>
-            <div className="card w-75 mt-5 mx-auto bg-dark text-white">
-                <div className="card-body">
-                    <h5 className="card-title">Task: {task.taskName}</h5>
-                    <p className="card-text">Details: {task.taskDetails}</p>
-                    {
-                        task?.status === 'completed' ? <p>Status: Completed</p> : <p>Status: Pending</p>
-                    }
-                    <Link href='/myTasks'><button>Go to tasks</button></Link>
+            <div className="card w-50 mt-5 mx-auto bg-dark text-white" style={{ height: '600px' }}>
+                <div className="card bg-dark text-white pt-5">
+                    <img src={task.taskURL} className="card-img-top w-75 mx-auto" alt="..." style={{ height: '400px' }} />
+                    <div className="card-body w-75 mx-auto" style={{ height: '200px' }}>
+                        <h5 className="card-title fs-4">Task: {task.taskName.length > 50 ? task.taskName.slice(0, 50) : task.taskName}</h5>
+                        <p className="card-text">Task Details: {task.taskDetails}</p>
+                        <p><span className="text-warning fw-bold fs-5">Status:</span> Task {task.status}</p>
+                        <Link href='/myTasks'><button className="btn btn-outline-light w-100">Go to Tasks</button></Link>
+                    </div>
                 </div>
             </div>
         </div>
