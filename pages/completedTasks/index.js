@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -11,6 +10,19 @@ const CompletedTasks = () => {
     const router = useRouter();
     const [completedTasks, setCompletedTasks] = useState([]);
     const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (!user?.email) {
+            if (typeof window !== "undefined") {
+                localStorage.setItem("path", router.asPath);
+                router.push('/login')
+            };
+
+        }
+        else {
+            router.push('/completedTasks')
+        }
+    }, []);
 
     useEffect(() => {
         setLoading(true)
@@ -87,7 +99,7 @@ const CompletedTasks = () => {
                                         }
                                     </div>
                                     <div className="d-flex justify-content-between px-2" style={{ height: '30px' }}>
-                                        <button href="#" className="btn btn-outline-light btn-sm">Add Comment</button>
+                                        <button href="#" className="btn btn-outline-light btn-sm" disabled>Add Comment</button>
                                         <button onClick={() => handleTaskNotCompleted(task._id)} href="#" className="btn btn-outline-light btn-sm">Not Completed</button>
                                         <button onClick={() => handleCompletedTask(task._id)} href="#" className="btn btn-outline-light btn-sm">Remove</button>
                                     </div>
