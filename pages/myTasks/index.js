@@ -87,13 +87,9 @@ const MyTasks = () => {
         }
     };
 
-    const handleUpdateTask = (id) => {
-        console.log(id)
-    }
-
 
     return (
-        <div>
+        <div className="mb-5">
             <Head>
                 <title>My Tasks</title>
             </Head>
@@ -102,18 +98,17 @@ const MyTasks = () => {
                 <div className="row row-cols-2 row-cols-md-3 g-4">
                     {
                         data.map(task => <div className="col" key={task._id}>
-                            <div className="card bg-dark text-white">
+                            <div className="card bg-dark text-white" style={{ width: '350px', height: '400px' }}>
                                 {
                                     task?.taskURL ?
-                                        <img src={task.taskURL} className="card-img-top" alt="..." />
+                                        <img src={task.taskURL} className="card-img-top" alt="..." style={{ width: '348px', height: '280px' }} />
                                         :
-                                        <Image src='/task.jfif' width={120} height={100} alt='..'></Image>
+                                        <Image src='/task.jfif' alt='..' width={348} height={280}></Image>
                                 }
-                                <div className="card-body">
-                                    <h5 className="card-title">Task: {task.taskName}</h5>
+                                <div className="card-body" style={{ height: '100px' }}>
+                                    <h5 className="card-title fs-5">Task: {task.taskName.length > 25 ? task.taskName.slice(0, 22) + '...' : task.taskName}</h5>
                                     <div className="d-flex justify-content-around mt-4">
                                         <Link href={`/myTasks/${task._id}`}><button className="btn btn-outline-light btn-sm">Details</button></Link>
-                                        <button onClick={() => handleUpdateTask(task._id)} className="btn btn-outline-light btn-sm" >Update</button>
                                         <button onClick={() => handleRemoveTask(task._id)} className="btn btn-outline-light btn-sm">Remove</button>
                                         <button onClick={() => handleTaskComplete(task._id)} className="btn btn-outline-light btn-sm">{task.status === 'completed' ? <span>Completed</span> : <span>Pending</span>}</button>
                                     </div>
