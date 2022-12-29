@@ -32,7 +32,7 @@ const MyTasks = () => {
 
     useEffect(() => {
         setLoading(true)
-        fetch(`http://localhost:5000/tasks?email=${user?.email}`)
+        fetch(`https://next-todo-server.vercel.app/tasks?email=${user?.email}`)
             .then((res) => res.json())
             .then((data) => {
                 setData(data)
@@ -49,7 +49,7 @@ const MyTasks = () => {
             status: 'completed'
         }
 
-        fetch(`http://localhost:5000/allTasks${id}`, {
+        fetch(`https://next-todo-server.vercel.app/allTasks${id}`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json'
@@ -73,7 +73,7 @@ const MyTasks = () => {
     const handleRemoveTask = (id) => {
         const confirm = window.confirm("Delete this review?");
         if (confirm) {
-            fetch(`http://localhost:5000/allTasks${id}`, {
+            fetch(`https://next-todo-server.vercel.app/allTasks${id}`, {
                 method: 'DELETE'
             })
                 .then(res => res.json())

@@ -1,4 +1,5 @@
 import { async } from "@firebase/util";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,9 +8,11 @@ const MyTaskID = ({ task }) => {
     const router = useRouter();
     const id = router.query.myTaskID;
 
-    console.log(task)
     return (
         <div>
+            <Head>
+                <title>Task Details</title>
+            </Head>
             <div className="card w-50 mt-5 mx-auto bg-dark text-white" style={{ height: '600px' }}>
                 <div className="card bg-dark text-white pt-5">
                     {
@@ -34,7 +37,7 @@ export default MyTaskID;
 
 export const getStaticProps = async (context) => {
     const { params } = context;
-    const res = await fetch(`http://localhost:5000/allTasks/${params?.myTaskID}`);
+    const res = await fetch(`https://next-todo-server.vercel.app/allTasks/${params?.myTaskID}`);
     const data = await res.json();
 
     return {
@@ -46,7 +49,7 @@ export const getStaticProps = async (context) => {
 
 
 export const getStaticPaths = async () => {
-    const res = await fetch('http://localhost:5000/allTasks');
+    const res = await fetch('https://next-todo-server.vercel.app/allTasks');
     const tasks = await res.json();
 
     const paths = tasks.map(task => {

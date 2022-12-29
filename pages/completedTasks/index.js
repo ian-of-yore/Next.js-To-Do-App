@@ -26,7 +26,7 @@ const CompletedTasks = () => {
 
     useEffect(() => {
         setLoading(true)
-        fetch(`http://localhost:5000/tasks?email=${user?.email}`)
+        fetch(`https://next-todo-server.vercel.app/tasks?email=${user?.email}`)
             .then((res) => res.json())
             .then((data) => {
                 const remaining = data.filter(task => task.status === 'completed');
@@ -43,7 +43,7 @@ const CompletedTasks = () => {
             status: 'pending'
         }
 
-        fetch(`http://localhost:5000/notCompleted${id}`, {
+        fetch(`https://next-todo-server.vercel.app/notCompleted${id}`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json'
@@ -61,7 +61,7 @@ const CompletedTasks = () => {
     const handleCompletedTask = (id) => {
         const confirm = window.confirm("Delete this review?");
         if (confirm) {
-            fetch(`http://localhost:5000/allTasks${id}`, {
+            fetch(`https://next-todo-server.vercel.app/allTasks${id}`, {
                 method: 'DELETE'
             })
                 .then(res => res.json())

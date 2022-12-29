@@ -30,7 +30,7 @@ const AddTask = () => {
                         taskDetails: data.taskDetails,
                         userEmail: user?.email
                     };
-                    fetch('http://localhost:5000/tasks', {
+                    fetch('https://next-todo-server.vercel.app/tasks', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
